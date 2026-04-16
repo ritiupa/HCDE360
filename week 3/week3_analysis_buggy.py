@@ -51,6 +51,8 @@ role_counts = {}
 
 for row in rows:
     role = row["role"].strip().title()
+    if not role:
+        continue
     if role in role_counts:
         role_counts[role] += 1
     else:
@@ -69,14 +71,24 @@ for row in rows:
         total_experience += years
         valid_experience_rows += 1
 
-avg_experience = total_experience / valid_experience_rows
-print(f"\nAverage years of experience: {avg_experience:.1f}")
+if valid_experience_rows > 0:
+    avg_experience = total_experience / valid_experience_rows
+    print(f"\nAverage years of experience: {avg_experience:.1f}")
+else:
+    print("\nAverage years of experience: N/A (no valid values)")
 
 # Find the top 5 highest satisfaction scores
 scored_rows = []
 for row in rows:
-    if row["satisfaction_score"].strip():
-        scored_rows.append((row["participant_name"], int(row["satisfaction_score"])))
+    participant_name = row["participant_name"].strip()
+    if not participant_name:
+        continue
+    score_text = row["satisfaction_score"].strip()
+    if not score_text:
+        continue
+    if not score_text.isdigit():
+        continue
+    scored_rows.append((participant_name, int(score_text)))
 
 scored_rows.sort(key=lambda x: x[1], reverse=True)
 top5 = scored_rows[:5]
