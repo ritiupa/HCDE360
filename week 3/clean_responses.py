@@ -2,7 +2,7 @@ import csv
 
 
 def clean_responses(
-    input_file: str = "responses_50.csv", output_file: str = "responses_cleaned.csv"
+    input_file: str = "responses.csv", output_file: str = "responses_cleaned.csv"
 ) -> None:
     with open(input_file, mode="r", newline="", encoding="utf-8") as infile:
         reader = csv.DictReader(infile)
