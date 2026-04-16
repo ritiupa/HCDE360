@@ -3,7 +3,7 @@ from collections import Counter
 
 
 def count_roles(
-    input_file: str = "responses_cleaned.csv", output_file: str = "role_counts_new.csv"
+    input_file: str = "responses_cleaned.csv", output_file: str = "role_counts.csv"
 ) -> None:
     role_counter = Counter()
 
@@ -14,7 +14,7 @@ def count_roles(
             role = (row.get("role") or "").strip()
             if not role:
                 continue
-            normalized_role = role.lower()
+            normalized_role = role.upper()
             role_counter[normalized_role] += 1
 
     # Print counts to terminal
