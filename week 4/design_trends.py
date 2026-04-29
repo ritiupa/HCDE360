@@ -2,6 +2,7 @@ import requests
 import csv
 from datetime import datetime, timedelta
 from pathlib import Path
+from requests.exceptions import RequestException, Timeout
 
 # The Wikipedia Pageviews API is completely free and requires no API key.
 # It returns how many times a Wikipedia article was viewed on any given day.
@@ -12,16 +13,18 @@ WIKIPEDIA_API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article
 # These are the UX/UI design trends we are tracking.
 # Each name matches the exact Wikipedia article title for that trend.
 TRENDS = [
-    "Glassmorphism",
-    "Neumorphism",
-    "Flat_design",
-    "Dark_mode",
-    "Skeuomorphism",
+    "Liquid_glass",            # trending, close to glassmorphism
+    "Neumorphism",            # fading -- good contrast case
+    "Dark_mode",              # stable mainstream -- baseline
+    "Voice_user_interface",   # rising with AI assistants
+    "Augmented_reality",      # long arc, currently resurging with Vision Pro
 ]
 
 # We will pull the last 90 days of pageview data to see the trend arc --
 # whether interest is rising, peaked, or fading.
 DAYS_TO_ANALYZE = 90
+REQUEST_TIMEOUT_SECONDS = 15
+MAX_RETRIES = 3
 
 def get_pageviews(article, start_date, end_date):
     """
@@ -38,7 +41,23 @@ def get_pageviews(article, start_date, end_date):
     # /metrics/pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}
     url = f"{WIKIPEDIA_API}/en.wikipedia/all-access/user/{article}/daily/{start_str}/{end_str}"
 
-    response = requests.get(url, headers={"User-Agent": "HCDE530-student-project/1.0"})
+    response = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": "HCDE530-student-project/1.0"},
+                timeout=REQUEST_TIMEOUT_SECONDS,
+            )
+            break
+        except Timeout:
+            print(f"  Timeout fetching '{article}' (attempt {attempt}/{MAX_RETRIES})")
+            if attempt == MAX_RETRIES:
+                print(f"  Skipping '{article}' after repeated timeouts.")
+                return []
+        except RequestException as err:
+            print(f"  Network error for '{article}': {err}")
+            return []
 
     # If Wikipedia returns anything other than 200, the article probably
     # does not exist or was titled differently -- skip it gracefully.

@@ -2,7 +2,7 @@
 
 ## C4- APIs and Data Acquisition:
 
-I used the Wikimedia Pageviews REST API to pull 90 days of daily Wikipedia article traffic for five UX/UI design trends: Glassmorphism, Neumorphism, Flat Design, Dark Mode, and Skeuomorphism. The endpoint returns daily view counts per article, which I used as a proxy for public interest in each trend. When a design style is getting attention, people look it up. The API is fully public, requires no key, and returns clean JSON. I chose this over pytrends (the common Google Trends library) because pytrends is an unofficial scraper that breaks frequently and would be unreliable for an assignment with a deadline.
+I used the Wikimedia Pageviews REST API to pull 90 days of daily Wikipedia article traffic for five UX/UI design trends: Liquid Glass, Neumorphism, Dark Mode, Voice User Interface, and Augmented Reality. The endpoint returns daily view counts per article, which I used as a proxy for public interest in each trend. When a design style is getting attention, people look it up. The API is fully public, requires no key, and returns clean JSON. I chose this over pytrends (the common Google Trends library) because pytrends is an unofficial scraper that breaks frequently and would be unreliable for an assignment with a deadline.
 
 The script extracts total views over 90 days, average daily views, peak day, and a momentum classification computed by comparing the most recent 30 days of traffic against the 30 days before that. It also generates lcd_line1 and lcd_line2 fields for each trend, formatted to 16 characters, which feed directly into the Arduino LCD display built for my physical computing course.
 
