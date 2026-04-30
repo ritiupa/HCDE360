@@ -22,8 +22,7 @@ CATEGORIES = [
 ]
 
 DISCOVERY_POOL_SIZE = 50
-TOP_RANKED = 50
-TOP_DETAIL_ROWS = 5
+TOP_TRENDS = 50
 
 DAYS_TO_ANALYZE = 90
 AVG_DAYS_PER_MONTH = 30.436875
@@ -162,7 +161,6 @@ def get_pageviews(article, start_date, end_date):
 
 
 def momentum_detail(views_list):
-    """Return label, % change recent vs prior 30d, recent avg, prior avg (or Nones)."""
     if len(views_list) < 60:
         return "Insufficient data", None, None, None
 
@@ -198,49 +196,8 @@ def trend_status_slug(momentum_label: str) -> str:
     }.get(momentum_label, "unknown")
 
 
-def build_summary_row(
-    display_title: str,
-    views: list,
-    rank: int,
-    window_start: datetime,
-    window_end: datetime,
-) -> dict:
-    momentum, pct_chg, recent_avg, prior_avg = momentum_detail(views)
-    total_views = sum(v for _, v in views)
-    days_n = len(views)
-    avg_day = total_views / days_n if days_n else 0.0
-    est_month = avg_day * AVG_DAYS_PER_MONTH
-    peak_day = max(views, key=lambda x: x[1])
-    peak_ratio = round(peak_day[1] / avg_day, 2) if avg_day else ""
-
-    return {
-        "rank": rank,
-        "trend": display_title,
-        "window_start": window_start.strftime("%Y-%m-%d"),
-        "window_end": window_end.strftime("%Y-%m-%d"),
-        "days_with_data": days_n,
-        "total_views_in_window": total_views,
-        "avg_views_per_day": round(avg_day, 2),
-        "est_views_per_month": round(est_month, 1),
-        "peak_date": peak_day[0].strftime("%Y-%m-%d"),
-        "peak_views": peak_day[1],
-        "peak_to_mean_daily_ratio": peak_ratio,
-        "recent_30d_avg_views": recent_avg if recent_avg is not None else "",
-        "prior_30d_avg_views": prior_avg if prior_avg is not None else "",
-        "pct_change_recent_vs_prior_30d": pct_chg if pct_chg is not None else "",
-        "momentum": momentum,
-        "trend_status": trend_status_slug(momentum),
-        "lcd_line1": display_title[:16],
-        "lcd_line2": f"Status: {momentum}"[:16],
-    }
-
-
-def build_raw_and_monthly_rows(
-    scored,
-    window_start: datetime,
-    window_end: datetime,
-):
-    """Daily long-form rows plus one monthly rollup row per article per calendar month."""
+def build_raw_and_monthly_rows(scored, window_start: datetime, window_end: datetime):
+    """Daily long-form rows plus monthly rollup per article (matches week 4 raw layout)."""
     ws = window_start.strftime("%Y-%m-%d")
     we = window_end.strftime("%Y-%m-%d")
     daily_rows = []
@@ -280,19 +237,52 @@ def build_raw_and_monthly_rows(
     return daily_rows + monthly_rows
 
 
+def build_summary_row(
+    display_title: str,
+    views: list,
+    rank: int,
+    window_start: datetime,
+    window_end: datetime,
+) -> dict:
+    momentum, pct_chg, recent_avg, prior_avg = momentum_detail(views)
+    total_views = sum(v for _, v in views)
+    days_n = len(views)
+    avg_day = total_views / days_n if days_n else 0.0
+    est_month = avg_day * AVG_DAYS_PER_MONTH
+    peak_day = max(views, key=lambda x: x[1])
+    peak_ratio = round(peak_day[1] / avg_day, 2) if avg_day else ""
+
+    return {
+        "rank": rank,
+        "trend": display_title,
+        "window_start": window_start.strftime("%Y-%m-%d"),
+        "window_end": window_end.strftime("%Y-%m-%d"),
+        "days_with_data": days_n,
+        "total_views_in_window": total_views,
+        "avg_views_per_day": round(avg_day, 2),
+        "est_views_per_month": round(est_month, 1),
+        "peak_date": peak_day[0].strftime("%Y-%m-%d"),
+        "peak_views": peak_day[1],
+        "peak_to_mean_daily_ratio": peak_ratio,
+        "recent_30d_avg_views": recent_avg if recent_avg is not None else "",
+        "prior_30d_avg_views": prior_avg if prior_avg is not None else "",
+        "pct_change_recent_vs_prior_30d": pct_chg if pct_chg is not None else "",
+        "momentum": momentum,
+        "trend_status": trend_status_slug(momentum),
+        "lcd_line1": display_title[:16],
+        "lcd_line2": f"Status: {momentum}"[:16],
+    }
+
+
 end_date = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
 start_date = end_date - timedelta(days=DAYS_TO_ANALYZE)
-
-script_dir = Path(__file__).resolve().parent
-raw_csv_path = script_dir / "design_trends_raw.csv"
-top_csv_path = script_dir / "design_trends.csv"
 
 print(
     f"Discovering up to {DISCOVERY_POOL_SIZE} UX-related article titles from "
     f"{len(CATEGORIES)} Wikipedia categories...\n"
 )
 candidates = discover_ux_candidate_titles(DISCOVERY_POOL_SIZE)
-print(f"Found {len(candidates)} candidates. Fetching {DAYS_TO_ANALYZE}-day pageviews...\n")
+print(f"Found {len(candidates)} candidates. Fetching pageviews to rank top {TOP_TRENDS}...\n")
 
 scored: list[tuple[str, list, int]] = []
 for i, display_title in enumerate(candidates, start=1):
@@ -305,9 +295,10 @@ for i, display_title in enumerate(candidates, start=1):
     time.sleep(REQUEST_DELAY_SECONDS)
 
 scored.sort(key=lambda x: -x[2])
-top_ranked = scored[:TOP_RANKED]
+top_scored = scored[:TOP_TRENDS]
 
 raw_rows = build_raw_and_monthly_rows(scored, start_date, end_date)
+raw_path = Path(__file__).with_name("design_trends_raw.csv")
 raw_fieldnames = [
     "granularity",
     "calendar_period",
@@ -316,21 +307,23 @@ raw_fieldnames = [
     "window_start",
     "window_end",
 ]
-
-with open(raw_csv_path, "w", newline="", encoding="utf-8") as f:
+with open(raw_path, "w", newline="", encoding="utf-8") as f:
     writer = csv.DictWriter(f, fieldnames=raw_fieldnames)
     writer.writeheader()
     writer.writerows(raw_rows)
+print(f"Saved {len(raw_rows)} raw rows (daily + monthly) to {raw_path}\n")
 
-print(f"Saved {len(raw_rows)} raw rows (daily + monthly) to {raw_csv_path}")
+results = []
+print(f"\nTop {len(top_scored)} articles by {DAYS_TO_ANALYZE}-day views — summary columns...\n")
 
-top_detail = top_ranked[:TOP_DETAIL_ROWS]
-summary_rows = [
-    build_summary_row(title, views, rank, start_date, end_date)
-    for rank, (title, views, _) in enumerate(top_detail, start=1)
-]
+for rank, (display_title, views, total_views) in enumerate(top_scored, start=1):
+    print(f"Rank {rank}: {display_title} ({total_views:,} views in window)")
+    row = build_summary_row(display_title, views, rank, start_date, end_date)
+    results.append(row)
+    print(f"  avg/day {row['avg_views_per_day']}, est/mo {row['est_views_per_month']}, {row['momentum']}\n")
 
-summary_fieldnames = [
+output_path = Path(__file__).with_name("design_trends.csv")
+fieldnames = [
     "rank",
     "trend",
     "window_start",
@@ -351,13 +344,15 @@ summary_fieldnames = [
     "lcd_line2",
 ]
 
-with open(top_csv_path, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=summary_fieldnames)
+with open(output_path, "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
-    writer.writerows(summary_rows)
+    writer.writerows(results)
 
-print(f"Saved top {len(summary_rows)} trends (details) to {top_csv_path}")
-print("\nLCD display strings for Arduino sketch (top 5):")
-for r in summary_rows:
+print(f"Saved results for {len(results)} trends to {output_path}")
+print("\nLCD display strings for Arduino sketch (first 10 rows):")
+for r in results[:10]:
     print(f"  Line 1: '{r['lcd_line1']}'")
     print(f"  Line 2: '{r['lcd_line2']}'")
+if len(results) > 10:
+    print(f"  ... ({len(results) - 10} more rows in CSV)")

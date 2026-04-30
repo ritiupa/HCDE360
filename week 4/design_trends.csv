@@ -1,6 +1,6 @@
-trend,total_views_90d,avg_daily_views,peak_date,peak_views,momentum,lcd_line1,lcd_line2
-Liquid glass,1516,16.8,2026-02-01,30,Peaked / Stable,Liquid glass,Status: Peaked /
-Neumorphism,7980,88.7,2026-03-07,147,Fading,Neumorphism,Status: Fading
-Dark mode,10013,111.3,2026-04-07,211,Fading,Dark mode,Status: Fading
-Voice user interface,4200,46.7,2026-03-06,71,Peaked / Stable,Voice user inter,Status: Peaked /
-Augmented reality,49169,546.3,2026-02-03,745,Peaked / Stable,Augmented realit,Status: Peaked /
+rank,trend,window_start,window_end,days_with_data,total_views_in_window,avg_views_per_day,est_views_per_month,peak_date,peak_views,peak_to_mean_daily_ratio,recent_30d_avg_views,prior_30d_avg_views,pct_change_recent_vs_prior_30d,momentum,trend_status,lcd_line1,lcd_line2
+1,BonziBuddy,2026-01-29,2026-04-29,91,46774,514.0,15644.6,2026-02-26,948,1.84,486.0,580.67,-16.3,Fading,fading,BonziBuddy,Status: Fading
+2,Brain–computer interface,2026-01-29,2026-04-29,91,40392,443.87,13510.0,2026-02-09,598,1.35,399.03,458.57,-13.0,Fading,fading,Brain–computer i,Status: Fading
+3,Human–computer interaction,2026-01-29,2026-04-29,91,22294,244.99,7456.7,2026-02-27,336,1.37,231.93,238.03,-2.6,Peaked / Stable,peaked_or_stable,Human–computer i,Status: Peaked /
+4,Center for Humane Technology,2026-01-29,2026-04-29,91,9044,99.38,3025.0,2026-03-22,457,4.6,115.03,117.83,-2.4,Peaked / Stable,peaked_or_stable,Center for Human,Status: Peaked /
+5,As We May Think,2026-01-29,2026-04-29,90,7793,86.59,2635.5,2026-02-28,275,3.18,79.73,91.2,-12.6,Fading,fading,As We May Think,Status: Fading

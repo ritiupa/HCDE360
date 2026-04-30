@@ -1,0 +1,51 @@
+rank,trend,window_start,window_end,days_with_data,total_views_in_window,avg_views_per_day,est_views_per_month,peak_date,peak_views,peak_to_mean_daily_ratio,recent_30d_avg_views,prior_30d_avg_views,pct_change_recent_vs_prior_30d,momentum,trend_status,lcd_line1,lcd_line2
+1,BonziBuddy,2026-01-29,2026-04-29,91,46774,514.0,15644.6,2026-02-26,948,1.84,486.0,580.67,-16.3,Fading,fading,BonziBuddy,Status: Fading
+2,Brain–computer interface,2026-01-29,2026-04-29,91,40392,443.87,13510.0,2026-02-09,598,1.35,399.03,458.57,-13.0,Fading,fading,Brain–computer i,Status: Fading
+3,Human–computer interaction,2026-01-29,2026-04-29,91,22294,244.99,7456.7,2026-02-27,336,1.37,231.93,238.03,-2.6,Peaked / Stable,peaked_or_stable,Human–computer i,Status: Peaked /
+4,Center for Humane Technology,2026-01-29,2026-04-29,91,9044,99.38,3025.0,2026-03-22,457,4.6,115.03,117.83,-2.4,Peaked / Stable,peaked_or_stable,Center for Human,Status: Peaked /
+5,As We May Think,2026-01-29,2026-04-29,90,7793,86.59,2635.5,2026-02-28,275,3.18,79.73,91.2,-12.6,Fading,fading,As We May Think,Status: Fading
+6,Bad Day (viral video),2026-01-29,2026-04-29,91,6358,69.87,2126.6,2026-04-29,1109,15.87,103.37,51.63,100.2,Rising,rising,Bad Day (viral v,Status: Rising
+7,10-foot user interface,2026-01-29,2026-04-29,91,3948,43.38,1320.5,2026-02-02,68,1.57,40.73,42.2,-3.5,Peaked / Stable,peaked_or_stable,10-foot user int,Status: Peaked /
+8,Computers are social actors,2026-01-29,2026-04-29,91,3389,37.24,1133.5,2026-04-27,70,1.88,38.4,38.0,1.1,Peaked / Stable,peaked_or_stable,Computers are so,Status: Peaked /
+9,Conference on Human Factors in Computing Systems,2026-01-29,2026-04-29,91,3266,35.89,1092.4,2026-04-13,76,2.12,39.77,33.7,18.0,Rising,rising,Conference on Hu,Status: Rising
+10,Addiction by Design,2026-01-29,2026-04-29,91,2791,30.67,933.5,2026-02-10,104,3.39,30.9,25.97,19.0,Rising,rising,Addiction by Des,Status: Rising
+11,Mercedes-Benz COMAND,2026-01-29,2026-04-29,91,2774,30.48,927.8,2026-02-23,71,2.33,27.0,29.43,-8.3,Peaked / Stable,peaked_or_stable,Mercedes-Benz CO,Status: Peaked /
+12,Algorithms of Oppression,2026-01-29,2026-04-29,91,2745,30.16,918.1,2026-02-23,67,2.22,26.2,27.5,-4.7,Peaked / Stable,peaked_or_stable,Algorithms of Op,Status: Peaked /
+13,Computer-supported cooperative work,2026-01-29,2026-04-29,91,2675,29.4,894.7,2026-02-12,90,3.06,31.17,30.2,3.2,Peaked / Stable,peaked_or_stable,Computer-support,Status: Peaked /
+14,3Dconnexion,2026-01-29,2026-04-29,91,2653,29.15,887.4,2026-04-01,59,2.02,33.13,27.63,19.9,Rising,rising,3Dconnexion,Status: Rising
+15,Automatic identification and data capture,2026-01-29,2026-04-29,90,2622,29.13,886.7,2026-02-25,95,3.26,23.17,29.97,-22.7,Fading,fading,Automatic identi,Status: Fading
+16,Aesthetic–usability effect,2026-01-29,2026-04-29,91,2404,26.42,804.1,2026-03-18,63,2.38,19.77,27.4,-27.9,Fading,fading,Aesthetic–usabil,Status: Fading
+17,Cognitive ergonomics,2026-01-29,2026-04-29,91,1707,18.76,570.9,2026-02-11,35,1.87,17.33,18.33,-5.5,Peaked / Stable,peaked_or_stable,Cognitive ergono,Status: Peaked /
+18,Cognitive complexity,2026-01-29,2026-04-29,91,1706,18.75,570.6,2026-01-30,48,2.56,18.2,18.63,-2.3,Peaked / Stable,peaked_or_stable,Cognitive comple,Status: Peaked /
+19,Cognitive dimensions of notations,2026-01-29,2026-04-29,91,1694,18.62,566.6,2026-03-24,43,2.31,16.9,20.53,-17.7,Fading,fading,Cognitive dimens,Status: Fading
+20,Contextual inquiry,2026-01-29,2026-04-29,90,1332,14.8,450.5,2026-03-02,172,11.62,10.3,19.5,-47.2,Fading,fading,Contextual inqui,Status: Fading
+21,Card sorting,2026-01-29,2026-04-29,91,1242,13.65,415.4,2026-02-04,28,2.05,13.2,13.0,1.5,Peaked / Stable,peaked_or_stable,Card sorting,Status: Peaked /
+22,Cognitive engineering,2026-01-29,2026-04-29,91,1193,13.11,399.0,2026-02-24,25,1.91,13.97,12.13,15.1,Rising,rising,Cognitive engine,Status: Rising
+23,Conversational user interface,2026-01-29,2026-04-29,91,1181,12.98,395.0,2026-03-04,48,3.7,11.5,12.7,-9.4,Peaked / Stable,peaked_or_stable,Conversational u,Status: Peaked /
+24,Computer-induced medical problems,2026-01-29,2026-04-29,91,1167,12.82,390.3,2026-02-09,31,2.42,12.5,11.63,7.4,Peaked / Stable,peaked_or_stable,Computer-induced,Status: Peaked /
+25,3D human–computer interaction,2026-01-29,2026-04-29,90,1128,12.53,381.5,2026-02-25,22,1.76,13.13,12.7,3.4,Peaked / Stable,peaked_or_stable,3D human–compute,Status: Peaked /
+26,Contextual design,2026-01-29,2026-04-29,91,1117,12.27,373.6,2026-03-02,148,12.06,8.77,15.73,-44.3,Fading,fading,Contextual desig,Status: Fading
+27,Activity recognition,2026-01-29,2026-04-29,91,1073,11.79,358.9,2026-04-02,21,1.78,11.13,12.23,-9.0,Peaked / Stable,peaked_or_stable,Activity recogni,Status: Peaked /
+28,Mike Cooley (engineer),2026-01-29,2026-04-29,91,958,10.53,320.4,2026-02-07,22,2.09,10.27,9.57,7.3,Peaked / Stable,peaked_or_stable,Mike Cooley (eng,Status: Peaked /
+29,Augmented cognition,2026-01-29,2026-04-29,91,734,8.07,245.5,2026-03-22,18,2.23,6.47,9.77,-33.8,Fading,fading,Augmented cognit,Status: Fading
+30,BioWall,2026-01-29,2026-04-29,81,711,8.78,267.2,2026-03-19,599,68.24,1.0,21.77,-95.4,Fading,fading,BioWall,Status: Fading
+31,Context-sensitive user interface,2026-01-29,2026-04-29,90,565,6.28,191.1,2026-04-14,14,2.23,6.43,6.1,5.5,Peaked / Stable,peaked_or_stable,Context-sensitiv,Status: Peaked /
+32,Outline of human–computer interaction,2026-01-29,2026-04-29,91,488,5.36,163.2,2026-03-31,15,2.8,5.43,5.57,-2.4,Peaked / Stable,peaked_or_stable,Outline of human,Status: Peaked /
+33,ACM Symposium on User Interface Software and Technology,2026-01-29,2026-04-29,90,434,4.82,146.8,2026-04-01,16,3.32,4.5,5.47,-17.7,Fading,fading,ACM Symposium on,Status: Fading
+34,Animal–computer interaction,2026-01-29,2026-04-29,91,422,4.64,141.1,2026-01-31,16,3.45,3.97,5.03,-21.2,Fading,fading,Animal–computer ,Status: Fading
+35,Comparison of usability evaluation methods,2026-01-29,2026-04-29,90,417,4.63,141.0,2026-03-02,105,22.66,3.13,7.2,-56.5,Fading,fading,Comparison of us,Status: Fading
+36,Adaptation (computer science),2026-01-29,2026-04-29,90,412,4.58,139.3,2026-04-19,14,3.06,4.77,4.23,12.6,Rising,rising,Adaptation (comp,Status: Rising
+37,Bodystorming,2026-01-29,2026-04-29,91,371,4.08,124.1,2026-03-09,37,9.08,3.1,5.37,-42.2,Fading,fading,Bodystorming,Status: Fading
+38,Marcelo Coelho,2026-01-29,2026-04-29,91,354,3.89,118.4,2026-03-30,15,3.86,3.17,4.2,-24.6,Fading,fading,Marcelo Coelho,Status: Fading
+39,Computer user satisfaction,2026-01-29,2026-04-29,91,316,3.47,105.7,2026-04-02,13,3.74,3.6,3.8,-5.3,Peaked / Stable,peaked_or_stable,Computer user sa,Status: Peaked /
+40,Computer processing of body language,2026-01-29,2026-04-29,91,289,3.18,96.7,2026-04-02,11,3.46,2.57,3.17,-18.9,Fading,fading,Computer process,Status: Fading
+41,Cortical modem,2026-01-29,2026-04-29,90,286,3.18,96.7,2026-04-26,9,2.83,3.13,3.1,1.1,Peaked / Stable,peaked_or_stable,Cortical modem,Status: Peaked /
+42,Collaborative information seeking,2026-01-29,2026-04-29,91,279,3.07,93.3,2026-02-22,10,3.26,2.33,3.2,-27.1,Fading,fading,Collaborative in,Status: Fading
+43,Brain painting,2026-01-29,2026-04-29,89,201,2.26,68.7,2026-03-26,8,3.54,2.33,2.4,-2.8,Peaked / Stable,peaked_or_stable,Brain painting,Status: Peaked /
+44,Confederate effect,2026-01-29,2026-04-29,89,170,1.91,58.1,2026-04-21,10,5.24,1.9,1.53,23.9,Rising,rising,Confederate effe,Status: Rising
+45,Ben Bederson,2026-01-29,2026-04-29,88,164,1.86,56.7,2026-02-02,7,3.76,1.67,1.53,8.7,Peaked / Stable,peaked_or_stable,Ben Bederson,Status: Peaked /
+46,Computer Graphics International,2026-01-29,2026-04-29,87,136,1.56,47.6,2026-03-04,9,5.76,1.73,1.7,2.0,Peaked / Stable,peaked_or_stable,Computer Graphic,Status: Peaked /
+47,CMN-GOMS,2026-01-29,2026-04-29,86,115,1.34,40.7,2026-01-30,9,6.73,1.17,1.3,-10.3,Fading,fading,CMN-GOMS,Status: Fading
+48,Alerting system,2026-01-29,2026-04-29,79,89,1.13,34.3,2026-02-17,5,4.44,1.33,0.83,60.0,Rising,rising,Alerting system,Status: Rising
+49,Barrier pointing,2026-01-29,2026-04-29,84,86,1.02,31.2,2026-03-15,7,6.84,0.77,1.43,-46.5,Fading,fading,Barrier pointing,Status: Fading
+50,Cognitive infocommunications,2026-01-29,2026-04-29,84,78,0.93,28.3,2026-03-31,9,9.69,0.93,1.07,-12.5,Fading,fading,Cognitive infoco,Status: Fading
