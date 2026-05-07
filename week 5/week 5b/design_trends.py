@@ -1,4 +1,5 @@
 import csv
+import os
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -274,85 +275,155 @@ def build_summary_row(
     }
 
 
-end_date = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-start_date = end_date - timedelta(days=DAYS_TO_ANALYZE)
+def run_trends_job():
+    """Fetch Wikipedia data, write CSVs, return summary rows (ranked list)."""
+    end_date = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    start_date = end_date - timedelta(days=DAYS_TO_ANALYZE)
 
-print(
-    f"Discovering up to {DISCOVERY_POOL_SIZE} UX-related article titles from "
-    f"{len(CATEGORIES)} Wikipedia categories...\n"
-)
-candidates = discover_ux_candidate_titles(DISCOVERY_POOL_SIZE)
-print(f"Found {len(candidates)} candidates. Fetching pageviews to rank top {TOP_TRENDS}...\n")
+    print(
+        f"Discovering up to {DISCOVERY_POOL_SIZE} UX-related article titles from "
+        f"{len(CATEGORIES)} Wikipedia categories...\n"
+    )
+    candidates = discover_ux_candidate_titles(DISCOVERY_POOL_SIZE)
+    print(f"Found {len(candidates)} candidates. Fetching pageviews to rank top {TOP_TRENDS}...\n")
 
-scored: list[tuple[str, list, int]] = []
-for i, display_title in enumerate(candidates, start=1):
-    article = title_for_pageviews_api(display_title)
-    print(f"[{i}/{len(candidates)}] {display_title}")
-    views = get_pageviews(article, start_date, end_date)
-    if views:
-        total_views = sum(v for _, v in views)
-        scored.append((display_title, views, total_views))
-    time.sleep(REQUEST_DELAY_SECONDS)
+    scored: list[tuple[str, list, int]] = []
+    for i, display_title in enumerate(candidates, start=1):
+        article = title_for_pageviews_api(display_title)
+        print(f"[{i}/{len(candidates)}] {display_title}")
+        views = get_pageviews(article, start_date, end_date)
+        if views:
+            total_views = sum(v for _, v in views)
+            scored.append((display_title, views, total_views))
+        time.sleep(REQUEST_DELAY_SECONDS)
 
-scored.sort(key=lambda x: -x[2])
-top_scored = scored[:TOP_TRENDS]
+    scored.sort(key=lambda x: -x[2])
+    top_scored = scored[:TOP_TRENDS]
 
-raw_rows = build_raw_and_monthly_rows(scored, start_date, end_date)
-raw_path = Path(__file__).with_name("design_trends_raw.csv")
-raw_fieldnames = [
-    "granularity",
-    "calendar_period",
-    "article_title",
-    "views",
-    "window_start",
-    "window_end",
-]
-with open(raw_path, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=raw_fieldnames)
-    writer.writeheader()
-    writer.writerows(raw_rows)
-print(f"Saved {len(raw_rows)} raw rows (daily + monthly) to {raw_path}\n")
+    raw_rows = build_raw_and_monthly_rows(scored, start_date, end_date)
+    raw_path = Path(__file__).with_name("design_trends_raw.csv")
+    raw_fieldnames = [
+        "granularity",
+        "calendar_period",
+        "article_title",
+        "views",
+        "window_start",
+        "window_end",
+    ]
+    with open(raw_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=raw_fieldnames)
+        writer.writeheader()
+        writer.writerows(raw_rows)
+    print(f"Saved {len(raw_rows)} raw rows (daily + monthly) to {raw_path}\n")
 
-results = []
-print(f"\nTop {len(top_scored)} articles by {DAYS_TO_ANALYZE}-day views — summary columns...\n")
+    results = []
+    print(f"\nTop {len(top_scored)} articles by {DAYS_TO_ANALYZE}-day views — summary columns...\n")
 
-for rank, (display_title, views, total_views) in enumerate(top_scored, start=1):
-    print(f"Rank {rank}: {display_title} ({total_views:,} views in window)")
-    row = build_summary_row(display_title, views, rank, start_date, end_date)
-    results.append(row)
-    print(f"  avg/day {row['avg_views_per_day']}, est/mo {row['est_views_per_month']}, {row['momentum']}\n")
+    for rank, (display_title, views, total_views) in enumerate(top_scored, start=1):
+        print(f"Rank {rank}: {display_title} ({total_views:,} views in window)")
+        row = build_summary_row(display_title, views, rank, start_date, end_date)
+        results.append(row)
+        print(f"  avg/day {row['avg_views_per_day']}, est/mo {row['est_views_per_month']}, {row['momentum']}\n")
 
-output_path = Path(__file__).with_name("design_trends.csv")
-fieldnames = [
-    "rank",
-    "trend",
-    "window_start",
-    "window_end",
-    "days_with_data",
-    "total_views_in_window",
-    "avg_views_per_day",
-    "est_views_per_month",
-    "peak_date",
-    "peak_views",
-    "peak_to_mean_daily_ratio",
-    "recent_30d_avg_views",
-    "prior_30d_avg_views",
-    "pct_change_recent_vs_prior_30d",
-    "momentum",
-    "trend_status",
-    "lcd_line1",
-    "lcd_line2",
-]
+    output_path = Path(__file__).with_name("design_trends.csv")
+    fieldnames = [
+        "rank",
+        "trend",
+        "window_start",
+        "window_end",
+        "days_with_data",
+        "total_views_in_window",
+        "avg_views_per_day",
+        "est_views_per_month",
+        "peak_date",
+        "peak_views",
+        "peak_to_mean_daily_ratio",
+        "recent_30d_avg_views",
+        "prior_30d_avg_views",
+        "pct_change_recent_vs_prior_30d",
+        "momentum",
+        "trend_status",
+        "lcd_line1",
+        "lcd_line2",
+    ]
 
-with open(output_path, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(results)
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(results)
 
-print(f"Saved results for {len(results)} trends to {output_path}")
-print("\nLCD display strings for Arduino sketch (first 10 rows):")
-for r in results[:10]:
-    print(f"  Line 1: '{r['lcd_line1']}'")
-    print(f"  Line 2: '{r['lcd_line2']}'")
-if len(results) > 10:
-    print(f"  ... ({len(results) - 10} more rows in CSV)")
+    print(f"Saved results for {len(results)} trends to {output_path}")
+    print("\nLCD display strings for Arduino sketch (first 10 rows):")
+    for r in results[:10]:
+        print(f"  Line 1: '{r['lcd_line1']}'")
+        print(f"  Line 2: '{r['lcd_line2']}'")
+    if len(results) > 10:
+        print(f"  ... ({len(results) - 10} more rows in CSV)")
+
+    return results
+
+
+def run_arduino_serial_listener(initial_results):
+    """
+    Optional Arduino loop (your sketch pattern).
+
+    Set ENABLE_ARDUINO_SERIAL=1 to enable. Uses pyserial (`pip install pyserial`).
+    Optional env: ARDUINO_PORT (default COM4), ARDUINO_BAUD (default 9600),
+    ARDUINO_NEW_ENTRY (optional string sent after top 5 as NEW:...).
+    """
+    if os.environ.get("ENABLE_ARDUINO_SERIAL") != "1":
+        print(
+            "\nArduino serial output is disabled. "
+            "Set ENABLE_ARDUINO_SERIAL=1 to enable."
+        )
+        return
+
+    try:
+        import serial
+    except ImportError:
+        print("\npyserial is not installed. Run: python -m pip install pyserial")
+        return
+
+    port = os.environ.get("ARDUINO_PORT", "COM4")
+    baud = int(os.environ.get("ARDUINO_BAUD", "9600"))
+
+    def send_top5(ser, top5, new_entry=None):
+        for t in top5:
+            line = f"{t['trend']}|{t['momentum']}\n"
+            ser.write(line.encode("utf-8"))
+            time.sleep(0.1)
+        if new_entry:
+            ser.write(f"NEW:{new_entry}\n".encode())
+
+    try:
+        ser = serial.Serial(port, baud)
+    except serial.SerialException as exc:
+        print(
+            f"\nCould not open serial port {port!r}: {exc}\n"
+            "On Windows, 'Access is denied' usually means something else is using the port:\n"
+            "  - Close Arduino IDE Serial Monitor and Serial Plotter for this board.\n"
+            "  - Stop any other Python/script or terminal that opened the same COM port.\n"
+            "  - In Device Manager → Ports (COM & LPT), confirm the board is on this COM number.\n"
+            "  - Unplug USB, wait a few seconds, reconnect, then run this script again.\n"
+        )
+        return
+
+    time.sleep(2)
+
+    results = initial_results
+    new_entry = os.environ.get("ARDUINO_NEW_ENTRY") or None
+    send_top5(ser, results[:5], new_entry)
+
+    while True:
+        if ser.in_waiting:
+            msg = ser.readline().decode(errors="replace").strip()
+
+            if msg == "REFRESH":
+                print("Refreshing data...")
+                results = run_trends_job()
+                new_entry = os.environ.get("ARDUINO_NEW_ENTRY") or None
+                send_top5(ser, results[:5], new_entry)
+
+
+results = run_trends_job()
+run_arduino_serial_listener(results)
